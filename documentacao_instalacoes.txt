@@ -1,0 +1,13 @@
+INSTALCAO FIREBASE NO PROJETO
+
+Criar um novo ou usar um projeto existente no firebase
+
+parar o serviço do react
+
+1- instalação do firebase no projeto
+
+npm install firebase
+
+2- instalacao do React router dom
+
+npm install react-router-dom
