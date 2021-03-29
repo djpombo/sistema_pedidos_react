@@ -29,7 +29,47 @@ function AuthProvider({ children }) {
 
     }, []);
 
+    async function signIn(email, password) {
+        setLoadingAuth(true);
+        await firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(async (value) => {
 
+                let uid = value.user.uid;
+                /**
+                 * tendo em maos o uid que retornou no value, enviamos para recuperar o restante das
+                 * informações do usuario que estão no banco dentro da tabela users mandando o id
+                 * único como doc e recebendo e recuperando via get();
+                 */
+                const userProfile = await firebase.firestore().collection('users').doc(uid).get();
+                /**
+                 * Monta o objeto data recuperando o uid que ja esta em variavel, buscando tb
+                 * o nome que veio de resposta do firestore e armazenado no userProfile, bem como
+                 * o avatar, o email não está no firestore e sim no auth, entao recuperamos ele do
+                 * campo de reesposta do signInWithEmailAndPassword
+                 */
+                let data = {
+                    uid: uid,
+                    nome: userProfile.data().nome,
+                    email: value.user.email,
+                    avatarUrl: userProfile.data().avatarUrl
+                }
+                /**
+                 * montado o objeto data, usa o context_API para setar para toda a aplicação
+                 * o ususario dizendo tb que está logado redirecionando para a dash,
+                 * tb localmente no navegador o storage e derruba o loading
+                 */
+                setUser(data);
+                storageUser(data);
+                setLoadingAuth(false);
+
+            }).catch((error) => {
+                console.log('error: ' + error);
+                setLoadingAuth(false);
+
+            });
+    }
+
+    /** Cadastrar um novo Usuario na plataforma */
     async function signUp(email, password, nome) {
         setLoadingAuth(true);
         await firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -63,7 +103,8 @@ function AuthProvider({ children }) {
         localStorage.setItem('SistemaUser', JSON.stringify(data));
     }
 
-    async function signOut(){
+    /** Fazer logout do usuario */
+    async function signOut() {
 
         await firebase.auth().signOut();
         localStorage.removeItem('SistemaUser');
@@ -81,7 +122,8 @@ function AuthProvider({ children }) {
                 user,
                 loading,
                 signUp,
-                signOut
+                signOut,
+                signIn
             }}>
             { children}
         </AuthContext.Provider>
