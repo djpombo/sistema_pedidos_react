@@ -3,6 +3,7 @@ import { useState, useContext } from 'react';
 import logo from '../../assets/logo.png';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth';
+import { toast } from 'react-toastify';
 
 
 
@@ -12,13 +13,15 @@ function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { signUp } = useContext(AuthContext);
+  const { signUp, loadingAuth } = useContext(AuthContext);
   
   
   function handleSubmit(e){
     e.preventDefault();
     if(nome !== '' && email !== '' && password !== ''){
       signUp(email, password, nome);
+    }else{
+      toast.error(`Ops! Voce deve preencher os campos!`)
     }
   }
 
@@ -41,7 +44,7 @@ function SignUp() {
 
           <input type="password" placeholder="********" autoComplete="off" 
               value={password} onChange={(e) => setPassword(e.target.value)}/>
-          <button type="submit">Cadastrar</button>
+          <button type="submit">{ loadingAuth ? 'Salvando...' : 'Cadastrar'}</button>
         </form>
         <Link to="/">Já tem uma conta? Entre</Link>
 

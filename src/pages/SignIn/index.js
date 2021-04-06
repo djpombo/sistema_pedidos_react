@@ -6,17 +6,21 @@ import { Link } from 'react-router-dom';
 import {AuthContext} from '../../contexts/auth';
 
 import './signin.css';
+import { toast } from 'react-toastify';
 
 
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { signIn } = useContext(AuthContext);
+  const { signIn, loadingAuth } = useContext(AuthContext);
   
   function handleSubmit(e){
     e.preventDefault();
     if(email !== '' && password !== ''){
       signIn(email, password);
+      
+    }else{
+      toast.error('Ops! Voce deve preencher os campos!');
     }
   }
 
@@ -36,7 +40,7 @@ function SignIn() {
 
           <input type="password" placeholder="********" autoComplete="off" 
               value={password} onChange={(e) => setPassword(e.target.value)}/>
-          <button type="submit">Acessar</button>
+          <button type="submit">{ loadingAuth ? 'Carregando... ' : 'Entrar'}</button>
         </form>
         <Link to="/register">criar uma conta</Link>
 

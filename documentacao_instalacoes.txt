@@ -11,3 +11,16 @@ npm install firebase
 2- instalacao do React router dom
 
 npm install react-router-dom
+
+3- Toasts
+
+npm install react-toastify
+
+3.1 - No App.js do projeto importe:
+
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
+4. Instalar svg icons from React Icons
+
+npm install react-icons --save
