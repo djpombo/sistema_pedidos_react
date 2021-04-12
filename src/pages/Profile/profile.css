@@ -55,6 +55,7 @@
     max-width: 600px;
 }
 
+
 .form-profile input:disabled{
     cursor: not-allowed;
 }
