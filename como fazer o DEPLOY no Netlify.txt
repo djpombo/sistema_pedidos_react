@@ -1,0 +1,21 @@
+DEPLOY via CLI do Netlify
+
+1. na raiz do projeto
+
+npm install -g netlify-cli
+
+2. apos intalaçao:
+
+netlify deploy
+
+3. em ?Publish directory(.)
+
+./build
+
+4. na raiz
+
+netlify deploy --prod
+
+5. em ?Publish directory(.)
+
+./build

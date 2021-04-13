@@ -1,0 +1,5 @@
+BUILD
+
+na raiz do projeto
+
+npm run build

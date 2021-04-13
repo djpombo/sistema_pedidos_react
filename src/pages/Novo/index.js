@@ -4,6 +4,7 @@ import firebase from '../../services/firebaseConnection';
 
 import { useHistory, useParams } from 'react-router-dom';
 
+
 import { AuthContext } from '../../contexts/auth';
 
 import Header from '../../components/Header';
@@ -95,7 +96,9 @@ export default function Novo() {
                 toast.success('Chamado alterado com sucesso');
                 setCustomerSelected(0);
                 setComplemento('');
-                history.push('/dashboard');//quando finaliza o registro manda de volta pra dash
+                //history.push('/dashboard');
+                
+                
             })
             .catch((error)=>{
                 toast.error(`Erro ${error} ao atualizar chamado`)
@@ -121,6 +124,7 @@ export default function Novo() {
                 setAssunto('');
                 setCustomers([0]);
                 setComplemento('');
+                //history.push('/dashboard');
             })
             .catch((error) => {
                 toast.error('Ops! Error ao salvar chamado no banco');
