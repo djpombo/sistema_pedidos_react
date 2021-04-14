@@ -77,11 +77,12 @@ export default function Novo() {
         }
         loadCustomers();
     },
-        [id])
+        [id]);
 
 
     async function handleRegister(e) {
-
+       
+        e.preventDefault();
         if(idCostumer){
             await firebase.firestore().collection('chamados').doc(id)
             .update({
@@ -96,8 +97,8 @@ export default function Novo() {
                 toast.success('Chamado alterado com sucesso');
                 setCustomerSelected(0);
                 setComplemento('');
-                //history.push('/dashboard');
-                
+                history.push('/dashboard');
+                setIdCostumer(false);
                 
             })
             .catch((error)=>{
@@ -107,7 +108,7 @@ export default function Novo() {
             return;//travar o fluxo
         }
 
-        e.preventDefault();
+       
 
         await firebase.firestore().collection('chamados')
             .add({

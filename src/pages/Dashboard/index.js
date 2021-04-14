@@ -24,100 +24,96 @@ export default function Dashboard() {
     //const { signOut } = useContext(AuthContext);
 
     const [chamados, setChamados] = useState([]);
-    const [colorBadge, setColorBadge] = useState('#FFF');
     const [loading, setLoading] = useState(true);
     const [loadingmore, setLoadingMore] = useState(false);
     const [lastDocs, setLastDocs] = useState();
     const [isEmpty, setIsEmpty] = useState(false);
 
-    const [showPostModal, setShowPostModal]= useState(false);
+    const [showPostModal, setShowPostModal] = useState(false);
     const [detail, setDetail] = useState();
 
     const listaRef = firebase.firestore().collection('chamados').orderBy('created', 'desc');
 
-    const { user } = useContext(AuthContext);
+
 
     useEffect(() => {
+        async function loadChamados() {
 
+
+            await listaRef.limit(5)
+                .get()
+                .then((snapshot) => {
+
+                    updateState(snapshot);
+
+
+                })
+                .catch((error) => {
+                    toast.error(`Erro ao buscar os chamados ${error}`);
+                    setLoading(false);
+                    setLoadingMore(false);
+                })
+        }
         loadChamados();
 
         return () => {
 
         }
 
-    },
-        []);
-
-    async function loadChamados() {
+    }, []
+    );
 
 
-        await listaRef.limit(5)
-            .get()
-            .then((snapshot) => {
+    function updateState(snapshot) {
 
-                updateState(snapshot);
+        const isCollection = snapshot.size === 0;
 
-                
+        if (!isCollection) {
+            let lista = [];
+            snapshot.forEach((doc) => {
+                lista.push({
+                    id: doc.id,
+                    nomeFantasia: doc.data().cliente,
+                    assunto: doc.data().assunto,
+                    status: doc.data().status,
+                    data: doc.data().created,
+                    dataFormatada: format(doc.data().created.toDate(), 'dd/MM/yyyy'),
+                    userId: doc.data().userId,
+                    clienteId: doc.data().clienteID,
+                    complemento: doc.data().complemento
+
+                })
             })
-            .catch((error) => {
-                toast.error(`Erro ao buscar os chamados ${error}`);
-                setLoading(false);
-                setLoadingMore(false);
-            })
+
+            const lastDoc = snapshot.docs[snapshot.docs.length - 1]; //Pegando o ultimo documento buscado
+
+            setChamados(chamados => [...chamados, ...lista]);
+            setLastDocs(lastDoc);
+        } else {
+            setIsEmpty(true);
         }
 
-    function updateState(snapshot){
-                    const isCollection = snapshot.size === 0;
+        setLoadingMore(false);
 
-                    if (!isCollection) {
-                        let lista = [];
-                        snapshot.forEach((doc) => {
-                            lista.push({
-                                id: doc.id,
-                                nomeFantasia: doc.data().cliente,
-                                assunto: doc.data().assunto,
-                                status: doc.data().status,
-                                data: doc.data().created,
-                                dataFormatada: format(doc.data().created.toDate(), 'dd/MM/yyyy'),
-                                userId: doc.data().userId,
-                                clienteId: doc.data().clienteID,
-                                complemento: doc.data().complemento
-                                
-                            })
-                        })
-
-                        const lastDoc = snapshot.docs[snapshot.docs.length -1]; //Pegando o ultimo documento buscado
-
-                        setChamados(chamados => [...chamados, ...lista]);
-                        setLastDocs(lastDoc);
-                    } else {
-                        setIsEmpty(true);
-                    }
-
-                    setLoadingMore(false);
-
-
-                
-            
         setLoading(false);
     }
 
-    async function handleMore(){
+    async function handleMore() {
         setLoadingMore(true);
         await listaRef.startAfter(lastDocs).limit(5)
-        .get()
-        .then((snapshot)=>{
-          updateState(snapshot)
-        })
-      }
-    
-      function tooglePostModal(item){
-          console.log('COMPLEMENTO', item.complemento)
-          setShowPostModal(!showPostModal); //abre e fecha a janela do modal
-          setDetail(item);
-          
-      }
-    
+            .get()
+            .then((snapshot) => {
+                updateState(snapshot)
+            })
+    }
+
+    function tooglePostModal(item) {
+        console.log('COMPLEMENTO', item.complemento)
+        setShowPostModal(!showPostModal); //abre e fecha a janela do modal
+        setDetail(item);
+
+    }
+
 
 
     if (loading) {
@@ -186,7 +182,7 @@ export default function Dashboard() {
                                                 </td>
                                                 <td data-label="Cadastrado">{item.dataFormatada}</td>
                                                 <td data-label="#">
-                                                    <button className="action" style={{ backgroundColor: '#3586f3' }} onClick={ () => {tooglePostModal(item)}}>
+                                                    <button className="action" style={{ backgroundColor: '#3586f3' }} onClick={() => { tooglePostModal(item) }}>
                                                         <FiSearch color="#FFF" size={17} />
                                                     </button>
                                                     <Link className="action" style={{ backgroundColor: '#F6A935' }} to={`/novo/${item.id}`}>
@@ -223,12 +219,12 @@ export default function Dashboard() {
 
             </div>
 
-                {showPostModal && (
-                    <Modal
-                        conteudo={detail}
-                        close={tooglePostModal}
-                     />
-                )}
+            {showPostModal && (
+                <Modal
+                    conteudo={detail}
+                    close={tooglePostModal}
+                />
+            )}
 
         </div>
     );
