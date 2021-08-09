@@ -35,6 +35,7 @@ export default function Customers() {
                     nomeFantasia: nomeFantasia,
                     cnpj: cnpj,
                     endereco: endereco
+                    
                 }).then(()=>{
                     toast.info(`Registro de ${nomeFantasia} efetuado com sucesso!`);
                     setNomeFantasia('');

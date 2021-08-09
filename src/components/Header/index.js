@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/auth';
 import avatar from '../../assets/avatar.png';
-import { FiHome, FiUsers, FiSettings } from "react-icons/fi"
+import { FiHome, FiUsers, FiSettings, FiDatabase } from "react-icons/fi"
 
 import { Link } from 'react-router-dom';
 
@@ -22,11 +22,15 @@ const { user } = useContext(AuthContext);
             </Link>
 
             <Link to="/customers">
-            <FiUsers color="#FFF" size="24"/>Clientes
+            <FiUsers color="#FFF" size="24"/>Add Clientes
             </Link>
 
             <Link to="/profile">
             <FiSettings color="#FFF" size="24"/>Perfil
+            </Link>
+
+            <Link to="/clientsedit">
+            <FiDatabase color="#FFF" size="24"/>Admin Clientes
             </Link>
             
         </div>

@@ -5,7 +5,9 @@ import SignUp from '../pages/SignUp';
 import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
 import Customers from '../pages/Customers';
+import ClientsEdit from '../pages/ClientsEdit';
 import Novo from '../pages/Novo';
+import EditClient from '../pages/EditClient';
 
 
 import Route from './Route';
@@ -22,6 +24,8 @@ export default function Routes(){
             <Route exact path = '/customers' component={Customers} isPrivate/>
             <Route exact path = '/novo' component={Novo} isPrivate />
             <Route exact path='/novo/:id' component={Novo} isPrivate />
+            <Route exact path='/clientsedit' component={ClientsEdit} isPrivate />
+            <Route exact path='/editclient/:id' component={EditClient} isPrivate />
             
         </Switch>
     );
